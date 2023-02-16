@@ -1,0 +1,1363 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_CLOUDFLARE_GRAPHQL DATA SOURCE",
+      "label": "Cloudflare GraphQL Data Source",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "fifemon-graphql-datasource",
+      "pluginName": "GraphQL Data Source"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "barchart",
+      "name": "Bar chart",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "bargauge",
+      "name": "Bar gauge",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "fifemon-graphql-datasource",
+      "name": "GraphQL Data Source",
+      "version": "1.3.0"
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "9.3.6"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 0,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.storage",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "key": "Q-55a71719-363c-4432-9b5f-096dd62469a0-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      storage: r2StorageAdaptiveGroups(orderBy: [bucketName_ASC], limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\",}) {\n        dimensions {\n          bucketName\n        }\n        max {\n          metadataSize\n          payloadSize\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Account Total Storage Usage",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "binary": {
+              "left": "max.metadataSize",
+              "reducer": "sum",
+              "right": "max.payloadSize"
+            },
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "max.metadataSize",
+                "max.payloadSize"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_dimensions.bucketName": true,
+              "_max.metadataSize": true,
+              "_max.payloadSize": true,
+              "dimensions.bucketName": true,
+              "max.metadataSize": true,
+              "max.payloadSize": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 3,
+        "y": 0
+      },
+      "id": 12,
+      "options": {
+        "displayMode": "basic",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.storage",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "key": "Q-55a71719-363c-4432-9b5f-096dd62469a0-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      storage: r2StorageAdaptiveGroups(orderBy: [bucketName_ASC], limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\",}) {\n        dimensions {\n          bucketName\n        }\n        max {\n          metadataSize\n          objectCount\n          payloadSize\n          uploadCount\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Account Total Storage Usage",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "dimensions.bucketName": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 7,
+        "x": 6,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.storage",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "key": "Q-55a71719-363c-4432-9b5f-096dd62469a0-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      storage: r2StorageAdaptiveGroups(orderBy: [bucketName_ASC], limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\",}) {\n        dimensions {\n          bucketName\n        }\n        max {\n          metadataSize\n          payloadSize\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Bucket Total Storage Usage",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "binary": {
+              "left": "max.metadataSize",
+              "reducer": "sum",
+              "right": "max.payloadSize"
+            },
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "max.metadataSize",
+                "max.payloadSize"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "max.metadataSize": true,
+              "max.payloadSize": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "max.metadataSize": ""
+            }
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 13,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.storage",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "key": "Q-55a71719-363c-4432-9b5f-096dd62469a0-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      storage: r2StorageAdaptiveGroups(orderBy: [datetimeHour_ASC], limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\",}) {\n        dimensions {\n          bucketName\n          time: datetimeHour\n        }\n        max {\n          metadataSize\n          payloadSize\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Bucket Storage Size",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "bucket",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "max.metadataSize",
+                "max.payloadSize"
+              ],
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Storage": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Total": {
+                "aggregations": [
+                  "sum"
+                ],
+                "operation": "groupby"
+              },
+              "bucket": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "bucket size": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "dimensions.bucketName": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "dimensions.time": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "max.metadataSize": {
+                "aggregations": []
+              },
+              "size": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "storage": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "total": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "dimensions.bucketName"
+            ]
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 0,
+        "y": 8
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.classA",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "key": "Q-14d67089-cfe5-4632-988a-b0c938870e01-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      classA: r2OperationsAdaptiveGroups(limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\", actionStatus: \"success\", actionType_in: [\"ListBuckets\", \"PutBucket\", \"ListObjects\", \"PutObject\", \"CopyObject\", \"CompleteMultipartUpload\", \"CreateMultipartUpload\", \"UploadPart\", \"UploadPartCopy\", \"PutBucketEncryption\", \"ListMultipartUploads\"]}) {\n        dimensions {\n          actionType\n        }\n        sum {\n          requests\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Account Total Class A Ops",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "dimensions.actionType": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 3,
+        "y": 8
+      },
+      "id": 1,
+      "options": {
+        "displayMode": "basic",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "$field_dimensions.actionType",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.classA",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "dimensions.actionType",
+          "key": "Q-14d67089-cfe5-4632-988a-b0c938870e01-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      classA: r2OperationsAdaptiveGroups(limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\", actionStatus: \"success\", actionType_in: [\"ListBuckets\", \"PutBucket\", \"ListObjects\", \"PutObject\", \"CopyObject\", \"CompleteMultipartUpload\", \"CreateMultipartUpload\", \"UploadPart\", \"UploadPartCopy\", \"PutBucketEncryption\", \"ListMultipartUploads\"]}) {\n        dimensions {\n          actionType\n        }\n        sum {\n          requests\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Account Total Class A Ops",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 7,
+        "x": 6,
+        "y": 8
+      },
+      "id": 10,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "dimensions.bucketName",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.classA",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "key": "Q-14d67089-cfe5-4632-988a-b0c938870e01-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      classA: r2OperationsAdaptiveGroups(limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\", actionStatus: \"success\", actionType_in: [\"ListBuckets\", \"PutBucket\", \"ListObjects\", \"PutObject\", \"CopyObject\", \"CompleteMultipartUpload\", \"CreateMultipartUpload\", \"UploadPart\", \"UploadPartCopy\", \"PutBucketEncryption\", \"ListMultipartUploads\"]}) {\n        dimensions {\n          bucketName\n        }\n        sum {\n          requests\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Bucket Total Class A Ops",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 13,
+        "y": 8
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "$field_dimensions.actionType",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.classA",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "dimensions.actionType",
+          "key": "Q-243ebbd1-abae-44d9-9194-543dcc2a56ab-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      classA: r2OperationsAdaptiveGroups(orderBy: [datetimeHour_ASC], limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\", actionStatus: \"success\", actionType_in: [\"ListBuckets\", \"PutBucket\", \"ListObjects\", \"PutObject\", \"CopyObject\", \"CompleteMultipartUpload\", \"CreateMultipartUpload\", \"UploadPart\", \"UploadPartCopy\", \"PutBucketEncryption\", \"ListMultipartUploads\"]}) {\n        dimensions {\n          actionType\n          time: datetimeHour\n        }\n        sum {\n          requests\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timeFormat": "",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Class A Operations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 0,
+        "y": 16
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.classB",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "key": "Q-14d67089-cfe5-4632-988a-b0c938870e01-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      classB: r2OperationsAdaptiveGroups(limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\", actionStatus: \"success\", actionType_in: [\"HeadBucket\", \"HeadObject\", \"GetObject\", \"ReportUsageSummary\", \"GetBucketEncryption\", \"GetBucketLocation\"]}) {\n        dimensions {\n          actionType\n        }\n        sum {\n          requests\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Account Total Class B Ops",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "dimensions.actionType": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 3,
+        "y": 16
+      },
+      "id": 3,
+      "options": {
+        "displayMode": "basic",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "$field_dimensions.actionType",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.classB",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "dimensions.actionType",
+          "key": "Q-14d67089-cfe5-4632-988a-b0c938870e01-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      classB: r2OperationsAdaptiveGroups(limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\", actionStatus: \"success\", actionType_in: [\"HeadBucket\", \"HeadObject\", \"GetObject\", \"ReportUsageSummary\", \"GetBucketEncryption\", \"GetBucketLocation\"]}) {\n        dimensions {\n          actionType\n        }\n        sum {\n          requests\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Account Total Class B Ops",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 7,
+        "x": 6,
+        "y": 16
+      },
+      "id": 9,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.classB",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "key": "Q-14d67089-cfe5-4632-988a-b0c938870e01-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      classB: r2OperationsAdaptiveGroups(limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\", actionStatus: \"success\", actionType_in: [\"HeadBucket\", \"HeadObject\", \"GetObject\", \"ReportUsageSummary\", \"GetBucketEncryption\", \"GetBucketLocation\"]}) {\n        dimensions {\n          bucketName\n        }\n        sum {\n          requests\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Bucket Total Class B Ops",
+      "transformations": [],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 13,
+        "y": 16
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "aliasBy": "$field_dimensions.actionType",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.classB",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "dimensions.actionType",
+          "key": "Q-243ebbd1-abae-44d9-9194-543dcc2a56ab-0",
+          "queryText": "query {\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      classB: r2OperationsAdaptiveGroups(orderBy: [datetimeHour_ASC], limit: 1000, filter: {date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\", actionStatus: \"success\", actionType_in: [\"HeadBucket\", \"HeadObject\", \"GetObject\", \"ReportUsageSummary\", \"GetBucketEncryption\", \"GetBucketLocation\"]}) {\n        dimensions {\n          actionType\n          time: datetimeHour\n        }\n        sum {\n          requests\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "Time"
+        }
+      ],
+      "title": "Class B Operations",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "hide": 0,
+        "name": "accountTag",
+        "options": [
+          {
+            "selected": true,
+            "text": "",
+            "value": ""
+          }
+        ],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "now/M",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Cloudflare-GraphQL-R2",
+  "uid": "ukV4w2J4z",
+  "version": 76,
+  "weekStart": ""
+}
