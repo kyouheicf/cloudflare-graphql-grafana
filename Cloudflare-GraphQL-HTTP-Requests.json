@@ -1,0 +1,553 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_CLOUDFLARE_GRAPHQL DATA SOURCE",
+      "label": "Cloudflare GraphQL Data Source",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "fifemon-graphql-datasource",
+      "pluginName": "GraphQL Data Source"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "barchart",
+      "name": "Bar chart",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "fifemon-graphql-datasource",
+      "name": "GraphQL Data Source",
+      "version": "1.3.0"
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "9.4.1"
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1000000000
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "orientation": "auto",
+        "showValue": "always",
+        "stacking": "none",
+        "text": {
+          "valueSize": 24
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.4.1",
+      "targets": [
+        {
+          "aliasBy": "$field_dimensions.date",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.traffic",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "dimensions.date",
+          "key": "Q-93733e5b-f6d4-47a5-a555-f7ea1eff12a9-0",
+          "queryText": "query{\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      traffic: httpRequests1dGroups (limit:1000,filter:{date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\"},orderBy:[date_ASC]) {\n        sum {\n          bytes\n        }\n        dimensions {\n          date\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timeFormat": "YYYY-MM",
+          "timePath": "dimensions.date"
+        }
+      ],
+      "title": "httpRequests1dGroups.sum.bytes.total",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "(.*) (.*) (.*) (.*) (.*) (.*)",
+            "renamePattern": "$2 $4"
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 200000
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "orientation": "auto",
+        "showValue": "always",
+        "stacking": "none",
+        "text": {
+          "valueSize": 24
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.4.1",
+      "targets": [
+        {
+          "aliasBy": "$field_dimensions.date",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.traffic",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "dimensions.date",
+          "key": "Q-93733e5b-f6d4-47a5-a555-f7ea1eff12a9-0",
+          "queryText": "query{\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      traffic: httpRequests1dGroups (limit:1000,filter:{date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\"},orderBy:[date_ASC]) {\n        sum {\n          requests\n        }\n        dimensions {\n          date\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timeFormat": "YYYY-MM",
+          "timePath": "dimensions.date"
+        }
+      ],
+      "title": "httpRequests1dGroups.sum.requests.total",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "(.*) (.*) (.*) (.*) (.*) (.*)",
+            "renamePattern": "$2 $4"
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 0,
+        "y": 10
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.4.1",
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.traffic",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "key": "Q-93733e5b-f6d4-47a5-a555-f7ea1eff12a9-0",
+          "queryText": "query{\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      traffic: httpRequests1dGroups (limit:1000,filter:{date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\"},orderBy:[date_ASC]) {\n        sum {\n          bytes\n        }\n        dimensions {\n          date\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "dimensions.date"
+        }
+      ],
+      "title": "httpRequests1dGroups.sum.bytes",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 10
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.4.1",
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.accounts.0.traffic",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "${DS_CLOUDFLARE_GRAPHQL DATA SOURCE}"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "key": "Q-93733e5b-f6d4-47a5-a555-f7ea1eff12a9-0",
+          "queryText": "query{\n  viewer {\n    accounts(filter: {accountTag: \"${accountTag}\"}) {\n      traffic: httpRequests1dGroups (limit:1000,filter:{date_geq: \"${__from:date:YYYY-MM-DD}\",date_leq: \"${__to:date:YYYY-MM-DD}\"},orderBy:[date_ASC]) {\n        sum {\n          requests\n        }\n        dimensions {\n          date\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "dimensions.date"
+        }
+      ],
+      "title": "httpRequests1dGroups.sum.requests",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "",
+  "revision": 1,
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "hide": 0,
+        "name": "accountTag",
+        "options": [
+          {
+            "selected": true,
+            "text": "",
+            "value": ""
+          }
+        ],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-11M/M",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Cloudflare-GraphQL-HTTP-Requests",
+  "uid": "ZmBRmix4z",
+  "version": 26,
+  "weekStart": ""
+}
